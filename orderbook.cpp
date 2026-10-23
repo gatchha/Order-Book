@@ -27,16 +27,48 @@ void orderbook::add_limit(std::uint64_t id, Side side,std::int64_t price, std::i
         level& lvl = bids.[price];
         lvl.order_.push_back(order{id,qty});
         resting_count_ += 1;
-        lvl.qty_ += 1;
+        lvl.qty_ += qty;
     }
     else {
-        asks[price].push_back(order{id,qty});
+        level& lvl = asks[price];
+        lvl.order_.push_back(order{id,qty});
         resting_count_ += 1;
+        lvl.qty_ += qty;
     }
 }
 
-std::size_t orderbook::count_order()const{
-   return resting_count_;
+std::int64_t orderbook::volume_at(Side side, std::int64_t price) const{
+    if (side == Side::Buy) {
+        auto it = bids.find(price);
+        if (it == bids.end()) {
+            return 0;
+        }
+        else {
+            return it->second.qty_;
+        }
+    }
+    else {
+        auto it = asks.find(price);
+        if (it == asks.end()) {
+            return 0;
+        }
+        else {
+            return it->second.qty_;
+        }
+    }
+};
+
+std::size_t orderbook::count_order(Side side, std::int64_t price)const{
+   if (side == Side::Buy) {
+       auto it = bids.find(price);
+       if (it == bids.end()) {
+           return 0;
+       }
+       else {
+           return
+       }
+   }
+
 
 
 }
