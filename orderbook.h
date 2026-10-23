@@ -32,7 +32,7 @@ struct orderbook {
     public:[[nodiscard]] std::optional<std::int64_t> best_bid() const;
     [[nodiscard]] std::optional<std::int64_t> best_ask() const;
     void add_limit(std::uint64_t id, Side side,std::int64_t price, std::int64_t qty);
-    [[nodiscard]] std::size_t count_order(Side side, std::int64_t price) const;
+    [[nodiscard]] std::size_t count_order() const;
     std::int64_t volume_at(Side side, std::int64_t price) const ;
 };
 

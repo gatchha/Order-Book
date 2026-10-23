@@ -24,7 +24,7 @@ std::optional<std::int64_t> orderbook::best_ask() const {
 
 void orderbook::add_limit(std::uint64_t id, Side side,std::int64_t price, std::int64_t qty) {
     if (side == Side::Buy) {
-        level& lvl = bids.[price];
+        level& lvl = bids[price];
         lvl.order_.push_back(order{id,qty});
         resting_count_ += 1;
         lvl.qty_ += qty;
@@ -56,19 +56,8 @@ std::int64_t orderbook::volume_at(Side side, std::int64_t price) const{
             return it->second.qty_;
         }
     }
-};
+}
 
-std::size_t orderbook::count_order(Side side, std::int64_t price)const{
-   if (side == Side::Buy) {
-       auto it = bids.find(price);
-       if (it == bids.end()) {
-           return 0;
-       }
-       else {
-           return
-       }
-   }
-
-
-
+std::size_t orderbook::count_order()const{
+   return resting_count_;
 }
