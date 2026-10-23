@@ -20,13 +20,19 @@ struct order {
     std::int64_t qty;
 };
 
-struct orderbook {
-    std::map<std::int64_t,std::list<order>,std::greater<std::int64_t>> bids ;
-    std::map<std::int64_t,std::list<order>> asks ;
-    std::optional<std::int64_t> best_bid() const;
+struct level {
+    private : std::list<order> order_;
+    std::int64_t qty_ = 0;
+};
 
-    std::optional<std::int64_t> best_ask() const;
+struct orderbook {
+    private: std::map<std::int64_t,std::list<level>,std::greater<>> bids ;
+    std::map<std::int64_t,std::list<level>> asks ;
+    std::size_t resting_count_ = 0;
+    public:[[nodiscard]] std::optional<std::int64_t> best_bid() const;
+    [[nodiscard]] std::optional<std::int64_t> best_ask() const;
     void add_limit(std::uint64_t id, Side side,std::int64_t price, std::int64_t qty);
+    [[nodiscard]] std::size_t count_order() const;
 };
 
 
