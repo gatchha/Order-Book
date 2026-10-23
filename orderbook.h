@@ -21,7 +21,7 @@ struct order {
 };
 
 struct level {
-    private : std::list<order> order_;
+    std::list<order> order_;
     std::int64_t qty_ = 0;
 };
 

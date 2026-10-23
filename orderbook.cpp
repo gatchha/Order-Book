@@ -24,8 +24,10 @@ std::optional<std::int64_t> orderbook::best_ask() const {
 
 void orderbook::add_limit(std::uint64_t id, Side side,std::int64_t price, std::int64_t qty) {
     if (side == Side::Buy) {
-        bids[price].push_back(order{id,qty});
+        level& lvl = bids.[price];
+        lvl.order_.push_back(order{id,qty});
         resting_count_ += 1;
+        lvl.qty_ += 1;
     }
     else {
         asks[price].push_back(order{id,qty});
