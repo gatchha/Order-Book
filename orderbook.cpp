@@ -23,19 +23,23 @@ std::optional<std::int64_t> orderbook::best_ask() const {
 
 
 void orderbook::add_limit(std::uint64_t id, Side side,std::int64_t price, std::int64_t qty) {
-    id_order_[id] = indicator{side,price};
-    if (side == Side::Buy) {
-        level& lvl = bids[price];
-        lvl.order_.push_back(order{id,qty});
-        resting_count_ += 1;
-        lvl.qty_ += qty;
-
+    if (qty <= 0) {
     }
-    else {
-        level& lvl = asks[price];
-        lvl.order_.push_back(order{id,qty});
-        resting_count_ += 1;
-        lvl.qty_ += qty;
+    else{
+        id_order[id] = indicator{side,price};
+        if (side == Side::Buy) {
+            level& lvl = bids[price];
+            lvl.order_.push_back(order{id,qty});
+            resting_count_ += 1;
+            lvl.qty_ += qty;
+
+        }
+        else {
+            level& lvl = asks[price];
+            lvl.order_.push_back(order{id,qty});
+            resting_count_ += 1;
+            lvl.qty_ += qty;
+        }
     }
 }
 
@@ -66,16 +70,46 @@ std::size_t orderbook::count_order()const{
 
 bool orderbook::cancel_order(std::uint64_t id) {
     auto it = id_order.find(id);
-    if (it != id_order.end()){
-        std::int64_t price = it->second.price;
-        if (it->second.side == Side::Buy) {
-        bids[price].order_.erase(id);
-        }
-    }
-    else {
+    if (it == id_order.end()) {
         return false;
     }
+    Side side = it->second.side ;
+    std::int64_t price = it->second.price;
+    if (side == Side::Buy) {
+        level& lvl = bids[price];
+        for (auto ord = lvl.order_.begin(); ord != lvl.order_.end();ord++) {
+            if (ord->id == id) {
+                resting_count_  -=1;
+                lvl.qty_ -= ord->qty;
+                lvl.order_.erase(ord);
+                id_order.erase(it);
+                if (lvl.order_.empty()) {
+                    bids.erase(price);
+                    break;
+                }
 
+                break;
+            }
+        }
+        return true;
+    }
+    else {
+        level& lvl = asks[price];
+        for (auto ord = lvl.order_.begin(); ord != lvl.order_.end();ord++) {
+            if (ord->id == id) {
+                resting_count_  -=1;
+                lvl.qty_ -= ord->qty;
+                lvl.order_.erase(ord);
+                id_order.erase(it);
+                if (lvl.order_.empty()) {
+                    asks.erase(price);
+                    break;
+                }
+                break;
+            }
+        }
+        return true;
 
+    }
 
 }
