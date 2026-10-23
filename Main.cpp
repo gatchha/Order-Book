@@ -10,13 +10,15 @@ int main() {
     orderbook b;
 
     b.add_limit(1023,Side::Buy,105,12);
-    b.add_limit(1021,Side::Buy,106,12);
+    b.add_limit(1021,Side::Buy,105,12);
     b.add_limit(1023,Side::Buy,107,12);
     b.add_limit(1023,Side::Sell,109,12);
 
     std::optional<std::int64_t> a = b.best_bid();
     std::optional<std::int64_t> c = b.best_ask();
-
+    std::cout<<"Resting order number is : "<<b.count_order()<<"\n";
+    std::cout<<"Quantity at 105 is :"<<b.volume_at(Side::Buy,105)<<"\n";
+    std::cout<<"Quantity at 100 is :"<<b.volume_at(Side::Buy,100)<<"\n";
     if (a.has_value()) {
         std::cout<<"best bid "<< *a <<"\n";
     }
