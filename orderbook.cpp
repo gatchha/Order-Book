@@ -26,17 +26,23 @@ void orderbook::add_limit(std::uint64_t id, Side side,std::int64_t price, std::i
     if (qty <= 0) {
     }
     else{
-        id_order[id] = indicator{side,price};
+
         if (side == Side::Buy) {
-            level& lvl = bids[price];
+            auto res  = bids.try_emplace(price);
+            level& lvl = res.first->second;
             lvl.order_.push_back(order{id,qty});
+            auto pos = std::prev(lvl.order_.end());
+            id_order[id] = indicator{side,price,pos,res.first,{}};
             resting_count_ += 1;
             lvl.qty_ += qty;
 
         }
         else {
-            level& lvl = asks[price];
+            auto res  = asks.try_emplace(price);
+            level& lvl = res.first->second;
             lvl.order_.push_back(order{id,qty});
+            auto pos = std::prev(lvl.order_.end());
+            id_order[id] = indicator{side,price,pos,{},res.first};
             resting_count_ += 1;
             lvl.qty_ += qty;
         }
@@ -74,42 +80,35 @@ bool orderbook::cancel_order(std::uint64_t id) {
         return false;
     }
     Side side = it->second.side ;
-    std::int64_t price = it->second.price;
+    auto pos = it->second.pos;
+    auto r = it->second.bid_level_;
+    auto a = it->second.ask_level_;
     if (side == Side::Buy) {
-        level& lvl = bids[price];
-        for (auto ord = lvl.order_.begin(); ord != lvl.order_.end();ord++) {
-            if (ord->id == id) {
-                resting_count_  -=1;
-                lvl.qty_ -= ord->qty;
-                lvl.order_.erase(ord);
-                id_order.erase(it);
-                if (lvl.order_.empty()) {
-                    bids.erase(price);
-                    break;
-                }
-
-                break;
-            }
+        level& lvl = it->second.bid_level_->second;
+        lvl.qty_ -= pos->qty;
+        resting_count_  -=1;
+        lvl.order_.erase(pos);
+        id_order.erase(it);
+        if (lvl.order_.empty()) {
+            bids.erase(r);
+            return true ;
         }
         return true;
-    }
+            }
+
     else {
-        level& lvl = asks[price];
-        for (auto ord = lvl.order_.begin(); ord != lvl.order_.end();ord++) {
-            if (ord->id == id) {
-                resting_count_  -=1;
-                lvl.qty_ -= ord->qty;
-                lvl.order_.erase(ord);
-                id_order.erase(it);
-                if (lvl.order_.empty()) {
-                    asks.erase(price);
-                    break;
-                }
-                break;
-            }
+        level& lvl = it->second.ask_level_->second;;
+        lvl.qty_ -= pos->qty;
+        resting_count_  -=1;
+        lvl.order_.erase(pos);
+        id_order.erase(it);
+        if (lvl.order_.empty()) {
+            asks.erase(a);
+            return true ;
         }
         return true;
+        }
 
     }
 
-}
+

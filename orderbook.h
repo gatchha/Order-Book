@@ -25,16 +25,23 @@ struct level {
     std::int64_t qty_ = 0;
 };
 
+using bid_map = std::map<std::int64_t,level,std::greater<>>;
+using ask_map = std::map<std::int64_t,level>;
+
+
 struct indicator {
     Side side;
     std::int64_t price;
+    std::list<order>::iterator pos;
+    bid_map::iterator bid_level_;
+    ask_map::iterator ask_level_;
 };
 
 struct orderbook {
-    private: std::map<std::int64_t,level,std::greater<>> bids ;
-    std::map<std::int64_t,level> asks ;
+    private: bid_map bids ;
+    ask_map asks;
     std::size_t resting_count_ = 0;
-    std::map<std::uint64_t,indicator> id_order;
+    std::unordered_map<std::uint64_t,indicator> id_order;
     public:[[nodiscard]] std::optional<std::int64_t> best_bid() const;
     [[nodiscard]] std::optional<std::int64_t> best_ask() const;
     void add_limit(std::uint64_t id, Side side,std::int64_t price, std::int64_t qty);
