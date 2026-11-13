@@ -109,6 +109,20 @@ bool orderbook::cancel_order(std::uint64_t id) {
         return true;
         }
 
+
     }
 
+std::vector<fill> orderbook::matching_order(std::uint64_t taker_id, std::optional<int64_t> price, std::int64_t &qty, Side side) {
+    std::vector<fill> fills;
+    if (side == Side::Buy) {
+        auto it = asks.begin();
+
+            while (it->first <price and qty !=0 and asks.empty() == false ) {
+                auto best = it->second.order_.begin();
+                std::int64_t qty_ech = std::ranges::min(best->qty,qty );
+                if (qty - qty_ech >0) {
+                    auto next = std::next(best);
+                    qty_ech = std::ranges::min(next->qty,qty);
+                }
+            }
 

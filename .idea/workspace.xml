@@ -3,6 +3,9 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="BackendCodeEditorMiscSettings">
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+  </component>
   <component name="CMakePresetLoader">{
   &quot;useNewFormat&quot;: true
 }</component>
@@ -23,8 +26,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10be78c5-a008-41f3-b76b-f8fa1fd9a6ff" name="Changes" comment="add cancel">
+    <list default="true" id="10be78c5-a008-41f3-b76b-f8fa1fd9a6ff" name="Changes" comment="reduce complexity of cancel">
+      <change afterPath="$PROJECT_DIR$/cancelorder.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/orderbook.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/orderbook.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/orderbook.h" beforeDir="false" afterPath="$PROJECT_DIR$/orderbook.h" afterDir="false" />
     </list>
@@ -107,7 +112,9 @@
       <option name="presentableId" value="Default" />
       <updated>1792584114247</updated>
       <workItem from="1792584115271" duration="5238000" />
-      <workItem from="1792595122660" duration="33331000" />
+      <workItem from="1792595122660" duration="34200000" />
+      <workItem from="1793577072022" duration="4524000" />
+      <workItem from="1794422173826" duration="11213000" />
     </task>
     <task id="LOCAL-00001" summary="add limit and count order">
       <option name="closed" value="true" />
@@ -157,7 +164,15 @@
       <option name="project" value="LOCAL" />
       <updated>1792793325904</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="reduce complexity of cancel">
+      <option name="closed" value="true" />
+      <created>1792834302566</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1792834302566</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -172,6 +187,18 @@
     <MESSAGE value="add limit and count order" />
     <MESSAGE value="Fix add limit (resting count and qty per level) and add volume" />
     <MESSAGE value="add cancel" />
-    <option name="LAST_COMMIT_MESSAGE" value="add cancel" />
+    <MESSAGE value="reduce complexity of cancel" />
+    <option name="LAST_COMMIT_MESSAGE" value="reduce complexity of cancel" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Main.cpp</url>
+          <line>7</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
